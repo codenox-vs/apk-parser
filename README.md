@@ -30,7 +30,7 @@ Get APK-parser from the Maven Central Reposotiry:
     <version>3.0.0</version>
 </dependency>
 ```
-Requires Java 17.
+Requires Java 11 and Jakarta.
 
 #### Usage
 
