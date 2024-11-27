@@ -48,9 +48,8 @@ public class InputStreamBerDataValueReader implements BerDataValueReader {
     @SuppressWarnings("resource")
     private static BerDataValue readDataValue(InputStream input)
             throws BerDataValueFormatException {
-        RecordingInputStream in = new RecordingInputStream(input);
 
-        try {
+        try (RecordingInputStream in = new RecordingInputStream(input)){
             int firstIdentifierByte = in.read();
             if (firstIdentifierByte == -1) {
                 // End of input

@@ -47,7 +47,8 @@ public class ApkMeta {
 	private final List<String> usesPermissions;
 	private final List<UseFeature> usesFeatures;
 	private final List<Permission> permissions;
-
+	private final List<String> mimeTypes;
+	
 	private ApkMeta(Builder builder) {
 		packageName = builder.packageName;
 		label = builder.label;
@@ -79,6 +80,7 @@ public class ApkMeta {
 		usesPermissions = builder.usesPermissions;
 		usesFeatures = builder.usesFeatures;
 		permissions = builder.permissions;
+		mimeTypes = builder.mimeTypes;
 	}
 
 
@@ -272,6 +274,13 @@ public class ApkMeta {
 		return this.permissions;
 	}
 
+	/**
+	 * @return the mimeTypes
+	 */
+	public List<String> getMimeTypes() {
+		return mimeTypes;
+	}
+
 
 	@Override
 	public String toString() {
@@ -331,7 +340,8 @@ public class ApkMeta {
 		private List<String> usesPermissions = new ArrayList<>();
 		private List<UseFeature> usesFeatures = new ArrayList<>();
 		private List<Permission> permissions = new ArrayList<>();
-
+		private final List<String> mimeTypes = new ArrayList<>();
+		
 		private Builder() {
 		}
 
@@ -512,6 +522,17 @@ public class ApkMeta {
 
 		public Builder addPermissions(Permission permission) {
 			this.permissions.add(permission);
+			return this;
+		}
+
+
+		public List<String> getMimeTypes() {
+			return mimeTypes;
+		}
+
+
+		public Builder addMimeType(String mimeType) {
+			this.mimeTypes.add(mimeType);
 			return this;
 		}
 
