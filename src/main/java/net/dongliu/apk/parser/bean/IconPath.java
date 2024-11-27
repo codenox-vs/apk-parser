@@ -21,7 +21,7 @@ public class IconPath {
 
     /**
      * Return the density this icon for. 0 means default icon.
-     * see {@link net.dongliu.apk.parser.struct.resource.Densities} for more density values.
+     * see {@link com.codenox.apk.parser.struct.resource.Densities} for more density values.
      */
     public int getDensity() {
         return density;

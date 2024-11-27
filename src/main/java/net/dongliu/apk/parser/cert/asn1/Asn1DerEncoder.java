@@ -16,8 +16,6 @@
 
 package net.dongliu.apk.parser.cert.asn1;
 
-import net.dongliu.apk.parser.cert.asn1.ber.BerEncoding;
-
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -28,6 +26,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import net.dongliu.apk.parser.cert.asn1.ber.BerEncoding;
 
 /**
  * Encoder of ASN.1 structures into DER-encoded form.

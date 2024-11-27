@@ -1,22 +1,32 @@
 package net.dongliu.apk.parser.parser;
 
-import net.dongliu.apk.parser.exception.ParserException;
-import net.dongliu.apk.parser.struct.ChunkHeader;
-import net.dongliu.apk.parser.struct.ChunkType;
-import net.dongliu.apk.parser.struct.StringPool;
-import net.dongliu.apk.parser.struct.StringPoolHeader;
-import net.dongliu.apk.parser.struct.resource.*;
-import net.dongliu.apk.parser.utils.Buffers;
-import net.dongliu.apk.parser.utils.Pair;
-import net.dongliu.apk.parser.utils.ParseUtils;
+import static net.dongliu.apk.parser.struct.ChunkType.UNKNOWN_YET;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-
-import static net.dongliu.apk.parser.struct.ChunkType.UNKNOWN_YET;
+import net.dongliu.apk.parser.exception.ParserException;
+import net.dongliu.apk.parser.struct.ChunkHeader;
+import net.dongliu.apk.parser.struct.ChunkType;
+import net.dongliu.apk.parser.struct.StringPool;
+import net.dongliu.apk.parser.struct.StringPoolHeader;
+import net.dongliu.apk.parser.struct.resource.LibraryEntry;
+import net.dongliu.apk.parser.struct.resource.LibraryHeader;
+import net.dongliu.apk.parser.struct.resource.NullHeader;
+import net.dongliu.apk.parser.struct.resource.PackageHeader;
+import net.dongliu.apk.parser.struct.resource.ResTableConfig;
+import net.dongliu.apk.parser.struct.resource.ResourcePackage;
+import net.dongliu.apk.parser.struct.resource.ResourceTable;
+import net.dongliu.apk.parser.struct.resource.ResourceTableHeader;
+import net.dongliu.apk.parser.struct.resource.Type;
+import net.dongliu.apk.parser.struct.resource.TypeHeader;
+import net.dongliu.apk.parser.struct.resource.TypeSpec;
+import net.dongliu.apk.parser.struct.resource.TypeSpecHeader;
+import net.dongliu.apk.parser.utils.Buffers;
+import net.dongliu.apk.parser.utils.Pair;
+import net.dongliu.apk.parser.utils.ParseUtils;
 
 /**
  * Parse android resource table file.

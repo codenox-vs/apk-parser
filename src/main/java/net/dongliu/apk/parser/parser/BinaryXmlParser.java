@@ -1,20 +1,33 @@
 package net.dongliu.apk.parser.parser;
 
-import net.dongliu.apk.parser.exception.ParserException;
-import net.dongliu.apk.parser.struct.*;
-import net.dongliu.apk.parser.struct.resource.ResourceTable;
-import net.dongliu.apk.parser.struct.xml.*;
-import net.dongliu.apk.parser.utils.Buffers;
-import net.dongliu.apk.parser.utils.Locales;
-import net.dongliu.apk.parser.utils.ParseUtils;
-import net.dongliu.apk.parser.utils.Strings;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import net.dongliu.apk.parser.exception.ParserException;
+import net.dongliu.apk.parser.struct.ChunkHeader;
+import net.dongliu.apk.parser.struct.ChunkType;
+import net.dongliu.apk.parser.struct.ResourceValue;
+import net.dongliu.apk.parser.struct.StringPool;
+import net.dongliu.apk.parser.struct.StringPoolHeader;
+import net.dongliu.apk.parser.struct.resource.ResourceTable;
+import net.dongliu.apk.parser.struct.xml.Attribute;
+import net.dongliu.apk.parser.struct.xml.Attributes;
+import net.dongliu.apk.parser.struct.xml.NullHeader;
+import net.dongliu.apk.parser.struct.xml.XmlCData;
+import net.dongliu.apk.parser.struct.xml.XmlHeader;
+import net.dongliu.apk.parser.struct.xml.XmlNamespaceEndTag;
+import net.dongliu.apk.parser.struct.xml.XmlNamespaceStartTag;
+import net.dongliu.apk.parser.struct.xml.XmlNodeEndTag;
+import net.dongliu.apk.parser.struct.xml.XmlNodeHeader;
+import net.dongliu.apk.parser.struct.xml.XmlNodeStartTag;
+import net.dongliu.apk.parser.struct.xml.XmlResourceMapHeader;
+import net.dongliu.apk.parser.utils.Buffers;
+import net.dongliu.apk.parser.utils.Locales;
+import net.dongliu.apk.parser.utils.ParseUtils;
+import net.dongliu.apk.parser.utils.Strings;
 
 /**
  * Android Binary XML format

@@ -1,11 +1,14 @@
 package net.dongliu.apk.parser.struct.resource;
 
+import jakarta.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import net.dongliu.apk.parser.struct.ResourceValue;
 import net.dongliu.apk.parser.struct.StringPool;
 import net.dongliu.apk.parser.utils.ResourceLoader;
-
-import javax.annotation.Nonnull;
-import java.util.*;
 
 /**
  * The apk resource table
@@ -13,104 +16,106 @@ import java.util.*;
  * @author dongliu
  */
 public class ResourceTable {
-    private Map<Short, ResourcePackage> packageMap = new HashMap<>();
-    private StringPool stringPool;
+	private Map<Short, ResourcePackage> packageMap = new HashMap<>();
+	private StringPool stringPool;
 
-    public static Map<Integer, String> sysStyle = ResourceLoader.loadSystemStyles();
+	public static Map<Integer, String> sysStyle = ResourceLoader.loadSystemStyles();
 
-    public void addPackage(ResourcePackage resourcePackage) {
-        this.packageMap.put(resourcePackage.getId(), resourcePackage);
-    }
-
-    public ResourcePackage getPackage(short id) {
-        return this.packageMap.get(id);
-    }
-
-    public StringPool getStringPool() {
-        return stringPool;
-    }
-
-    public void setStringPool(StringPool stringPool) {
-        this.stringPool = stringPool;
-    }
+	public void addPackage(ResourcePackage resourcePackage) {
+		this.packageMap.put(resourcePackage.getId(), resourcePackage);
+	}
 
 
-    /**
-     * Get resources match the given resource id.
-     */
-    @Nonnull
-    public List<Resource> getResourcesById(long resourceId) {
-        // An Android Resource id is a 32-bit integer. It comprises
-        // an 8-bit Package id [bits 24-31]
-        // an 8-bit Type id [bits 16-23]
-        // a 16-bit Entry index [bits 0-15]
+	public ResourcePackage getPackage(short id) {
+		return this.packageMap.get(id);
+	}
 
 
-        short packageId = (short) (resourceId >> 24 & 0xff);
-        short typeId = (short) ((resourceId >> 16) & 0xff);
-        int entryIndex = (int) (resourceId & 0xffff);
-        ResourcePackage resourcePackage = this.getPackage(packageId);
-        if (resourcePackage == null) {
-            return Collections.emptyList();
-        }
-        TypeSpec typeSpec = resourcePackage.getTypeSpec(typeId);
-        List<Type> types = resourcePackage.getTypes(typeId);
-        if (typeSpec == null || types == null) {
-            return Collections.emptyList();
-        }
-        if (!typeSpec.exists(entryIndex)) {
-            return Collections.emptyList();
-        }
+	public StringPool getStringPool() {
+		return stringPool;
+	}
 
-        // read from type resource
-        List<Resource> result = new ArrayList<>();
-        for (Type type : types) {
-            ResourceEntry resourceEntry = type.getResourceEntry(entryIndex);
-            if (resourceEntry == null) {
-                continue;
-            }
-            ResourceValue currentResourceValue = resourceEntry.getValue();
-            if (currentResourceValue == null) {
-                continue;
-            }
 
-            // cyclic reference detect
-            if (currentResourceValue instanceof ResourceValue.ReferenceResourceValue) {
-                if (resourceId == ((ResourceValue.ReferenceResourceValue) currentResourceValue)
-                        .getReferenceResourceId()) {
-                    continue;
-                }
-            }
+	public void setStringPool(StringPool stringPool) {
+		this.stringPool = stringPool;
+	}
 
-            result.add(new Resource(typeSpec, type, resourceEntry));
-        }
-        return result;
-    }
 
-    /**
-     * contains all info for one resource
-     */
-    public static class Resource {
-        private TypeSpec typeSpec;
-        private Type type;
-        private ResourceEntry resourceEntry;
+	/**
+	 * Get resources match the given resource id.
+	 */
+	@Nonnull
+	public List<Resource> getResourcesById(long resourceId) {
+		// An Android Resource id is a 32-bit integer. It comprises
+		// an 8-bit Package id [bits 24-31]
+		// an 8-bit Type id [bits 16-23]
+		// a 16-bit Entry index [bits 0-15]
 
-        public Resource(TypeSpec typeSpec, Type type, ResourceEntry resourceEntry) {
-            this.typeSpec = typeSpec;
-            this.type = type;
-            this.resourceEntry = resourceEntry;
-        }
+		short packageId = (short) (resourceId >> 24 & 0xff);
+		short typeId = (short) ((resourceId >> 16) & 0xff);
+		int entryIndex = (int) (resourceId & 0xffff);
+		ResourcePackage resourcePackage = this.getPackage(packageId);
+		if(resourcePackage == null) {
+			return Collections.emptyList();
+		}
+		TypeSpec typeSpec = resourcePackage.getTypeSpec(typeId);
+		List<Type> types = resourcePackage.getTypes(typeId);
+		if(typeSpec == null || types == null || !typeSpec.exists(entryIndex)) {
+			return Collections.emptyList();
+		}
 
-        public TypeSpec getTypeSpec() {
-            return typeSpec;
-        }
+		// read from type resource
+		List<Resource> result = new ArrayList<>();
+		for(Type type : types) {
+			ResourceEntry resourceEntry = type.getResourceEntry(entryIndex);
+			if(resourceEntry == null) {
+				continue;
+			}
+			ResourceValue currentResourceValue = resourceEntry.getValue();
+			if(currentResourceValue == null) {
+				continue;
+			}
 
-        public Type getType() {
-            return type;
-        }
+			// cyclic reference detect
+			if(currentResourceValue instanceof ResourceValue.ReferenceResourceValue) {
+				if(resourceId == ((ResourceValue.ReferenceResourceValue) currentResourceValue)
+					.getReferenceResourceId()) {
+					continue;
+				}
+			}
 
-        public ResourceEntry getResourceEntry() {
-            return resourceEntry;
-        }
-    }
+			result.add(new Resource(typeSpec, type, resourceEntry));
+		}
+		return result;
+	}
+
+	/**
+	 * contains all info for one resource
+	 */
+	public static class Resource {
+		private TypeSpec typeSpec;
+		private Type type;
+		private ResourceEntry resourceEntry;
+
+		public Resource(TypeSpec typeSpec, Type type, ResourceEntry resourceEntry) {
+			this.typeSpec = typeSpec;
+			this.type = type;
+			this.resourceEntry = resourceEntry;
+		}
+
+
+		public TypeSpec getTypeSpec() {
+			return typeSpec;
+		}
+
+
+		public Type getType() {
+			return type;
+		}
+
+
+		public ResourceEntry getResourceEntry() {
+			return resourceEntry;
+		}
+	}
 }

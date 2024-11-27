@@ -1,8 +1,8 @@
 package net.dongliu.apk.parser.bean;
 
-import java.util.List;
-
 import static java.util.Objects.requireNonNull;
+
+import java.util.List;
 
 /**
  * ApkSignV1 certificate file.

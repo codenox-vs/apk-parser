@@ -1,16 +1,29 @@
 package net.dongliu.apk.parser.parser;
 
-import net.dongliu.apk.parser.bean.*;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import net.dongliu.apk.parser.bean.ApkMeta;
+import net.dongliu.apk.parser.bean.GlEsVersion;
+import net.dongliu.apk.parser.bean.IconPath;
+import net.dongliu.apk.parser.bean.Permission;
+import net.dongliu.apk.parser.bean.UseFeature;
 import net.dongliu.apk.parser.struct.ResourceValue;
 import net.dongliu.apk.parser.struct.resource.Densities;
 import net.dongliu.apk.parser.struct.resource.ResourceEntry;
 import net.dongliu.apk.parser.struct.resource.ResourceTable;
 import net.dongliu.apk.parser.struct.resource.Type;
-import net.dongliu.apk.parser.struct.xml.*;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
+import net.dongliu.apk.parser.struct.xml.Attribute;
+import net.dongliu.apk.parser.struct.xml.Attributes;
+import net.dongliu.apk.parser.struct.xml.XmlCData;
+import net.dongliu.apk.parser.struct.xml.XmlNamespaceEndTag;
+import net.dongliu.apk.parser.struct.xml.XmlNamespaceStartTag;
+import net.dongliu.apk.parser.struct.xml.XmlNodeEndTag;
+import net.dongliu.apk.parser.struct.xml.XmlNodeStartTag;
 
 /**
  * trans binary xml to apk meta info

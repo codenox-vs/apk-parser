@@ -25,12 +25,12 @@ Table of Contents
 Get APK-parser from the Maven Central Reposotiry:
 ```xml
 <dependency>
-    <groupId>net.dongliu</groupId>
+    <groupId>com.codenox</groupId>
     <artifactId>apk-parser</artifactId>
-    <version>2.6.10</version>
+    <version>3.0.0</version>
 </dependency>
 ```
-From version 2.0, apk-parser requires Java 7. The last version to support Java 6 is 1.7.4.
+Requires Java 11 and Jakarta.
 
 #### Usage
 

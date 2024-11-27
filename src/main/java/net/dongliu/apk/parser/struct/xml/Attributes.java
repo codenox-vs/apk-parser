@@ -1,6 +1,6 @@
 package net.dongliu.apk.parser.struct.xml;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * xml node attributes

@@ -16,8 +16,6 @@
  */
 package net.dongliu.apk.parser.utils.xml;
 
-import net.dongliu.apk.parser.utils.xml.CodePointTranslator;
-
 import java.io.IOException;
 import java.io.Writer;
 
