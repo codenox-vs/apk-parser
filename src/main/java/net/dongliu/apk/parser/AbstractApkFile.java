@@ -104,6 +104,37 @@ public abstract class AbstractApkFile implements Closeable {
 		return this.locales;
 	}
 
+    /**
+     * Get the apk's certificate meta. If have multi signer, return the certificate the first signer used.
+     *
+     * @deprecated use {{@link #getApkSingers()}} instead
+     */
+    @Deprecated
+    public List<CertificateMeta> getCertificateMetaList() throws IOException, CertificateException {
+        if (apkSigners == null) {
+            parseCertificates();
+        }
+        if (apkSigners.isEmpty()) {
+            throw new ParserException("ApkFile certificate not found");
+        }
+        return apkSigners.get(0).getCertificateMetas();
+    }
+
+    /**
+     * Get the apk's all certificates.
+     * For each entry, the key is certificate file path in apk file, the value is the certificates info of the certificate file.
+     *
+     * @deprecated use {{@link #getApkSingers()}} instead
+     */
+    @Deprecated
+    public Map<String, List<CertificateMeta>> getAllCertificateMetas() throws IOException, CertificateException {
+        List<ApkSigner> apkSigners = getApkSingers();
+        Map<String, List<CertificateMeta>> map = new LinkedHashMap<>();
+        for (ApkSigner apkSigner : apkSigners) {
+            map.put(apkSigner.getPath(), apkSigner.getCertificateMetas());
+        }
+        return map;
+    }
 
 	/**
 	 * Get the apk's all cert file info, of apk v1 signing.
@@ -290,15 +321,47 @@ public abstract class AbstractApkFile implements Closeable {
 		return new Icon(filePath, density, getFileData(filePath));
 	}
 
+    /**
+     * Get the default apk icon file.
+     *
+     * @deprecated use {@link #getAllIcons()}
+     */
+    @Deprecated
+    public Icon getIconFile() throws IOException {
+        ApkMeta apkMeta = getApkMeta();
+        String iconPath = apkMeta.getIcon();
+        if (iconPath == null) {
+            return null;
+        }
+        return new Icon(iconPath, Densities.DEFAULT, getFileData(iconPath));
+    }
 
 	/**
 	 * Get all the icon paths, for different densities.
+     *
+     * @deprecated using {@link #getAllIcons()} instead
 	 */
-	private List<IconPath> getIconPaths() throws IOException {
+    @Deprecated
+    public List<IconPath> getIconPaths() throws IOException {
 		parseManifest();
 		return this.iconPaths;
 	}
 
+    /**
+     * Get all the icons, for different densities.
+     *
+     * @deprecated using {@link #getAllIcons()} instead
+     */
+    @Deprecated
+    public List<Icon> getIconFiles() throws IOException {
+        List<IconPath> iconPaths = getIconPaths();
+        List<Icon> icons = new ArrayList<>(iconPaths.size());
+        for (IconPath iconPath : iconPaths) {
+            Icon icon = newFileIcon(iconPath.getPath(), iconPath.getDensity());
+            icons.add(icon);
+        }
+        return icons;
+    }
 
 	/**
 	 * get class infos form dex file. currently only class name
@@ -368,6 +431,13 @@ public abstract class AbstractApkFile implements Closeable {
 		this.locales = resourceTableParser.getLocales();
 	}
 
+    /**
+     * Check apk sign. This method only use apk v1 scheme verifier
+     *
+     * @deprecated using google official ApkVerifier of apksig lib instead.
+     */
+    @Deprecated
+    public abstract ApkSignStatus verifyApk() throws IOException;
 
 	@Override
 	public void close() throws IOException {
