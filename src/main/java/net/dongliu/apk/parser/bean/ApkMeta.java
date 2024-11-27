@@ -191,7 +191,17 @@ public class ApkMeta {
 		this.usesPermissions.add(permission);
 	}
 
-
+   /**
+    * the icon file path in apk
+    *
+    * @return null if not found
+    * @deprecated use {@link AbstractApkFile#getAllIcons()} instead.
+    */
+   @Deprecated
+   public String getIcon() {
+       return icon;
+   }
+   
 	/**
 	 * alias for getLabel
 	 */

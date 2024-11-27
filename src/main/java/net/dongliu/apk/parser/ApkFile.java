@@ -11,8 +11,11 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import net.dongliu.apk.parser.bean.ApkSignStatus;
 import net.dongliu.apk.parser.utils.Inputs;
 
 /**
@@ -37,6 +40,44 @@ public class ApkFile extends AbstractApkFile {
 
 	public ApkFile(String filePath) throws IOException {
 		this(new File(filePath));
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @deprecated using google official ApkVerifier of apksig lib instead.
+	 */
+	@Override
+	@Deprecated
+	public ApkSignStatus verifyApk() throws IOException {
+		ZipEntry entry = zf.getEntry("META-INF/MANIFEST.MF");
+		if(entry == null) {
+			// apk is not signed;
+			return ApkSignStatus.notSigned;
+		}
+
+		try (JarFile jarFile = new JarFile(this.apkFile)) {
+			Enumeration<JarEntry> entries = jarFile.entries();
+			byte[] buffer = new byte[8192];
+
+			while (entries.hasMoreElements()) {
+				JarEntry e = entries.nextElement();
+				if(e.isDirectory()) {
+					continue;
+				}
+				try (InputStream in = jarFile.getInputStream(e)) {
+					// Read in each jar entry. A security exception will be thrown if a signature/digest check fails.
+					int count;
+					while ((count = in.read(buffer, 0, buffer.length)) != -1) {
+						// Don't care
+					}
+				} catch (SecurityException se) {
+					return ApkSignStatus.incorrect;
+				}
+			}
+		}
+		return ApkSignStatus.signed;
 	}
 
 
